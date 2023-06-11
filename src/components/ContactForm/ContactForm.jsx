@@ -1,67 +1,65 @@
 import { nanoid } from 'nanoid';
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { Form, Input, Label, Button } from './ContactForm.styled';
 import PropTypes from 'prop-types';
 
-const INITIAL_STATE = {
-    name: '',
-    number: ''
-}
+export const ContactForm = ({saveContact}) => {
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
 
-class ContactForm extends Component {
-    state = {...INITIAL_STATE};
+    const nameInputId = nanoid();
+    const telInputId = nanoid();
 
-    nameInputId = nanoid();
-    telInputId = nanoid();
-    
-    static propTypes = {
-        saveContact: PropTypes.func.isRequired,
+    const handleChange = ({ target }) => {
+        if (target.name === 'name') {
+            setName(target.value);
+        } else if (target.name === 'number') {
+            setNumber(target.value);
+        }
     }
 
-    handleChange = ({target}) => {
-        this.setState({
-            [target.name]: target.value,
-        })
-    }
-    handleSubmit = e => {
+    const handleSubmit = e => {
         e.preventDefault();
-        this.props.saveContact({
-            ...this.state, id: nanoid()
+        saveContact({
+            name, number, id: nanoid()
         })
-       this.reset();
+        reset();
     }
-    reset = () => {
-        this.setState({...INITIAL_STATE});
+
+    const reset = () => {
+        setName('');
+        setNumber('');
     }
-    render() {
-        return (
-            <Form onSubmit={this.handleSubmit}>
-                <Label htmlFor={this.nameInputId}>Name</Label>
-                <Input
-                    type="text"
-                    id={this.nameInputId}
-                    name="name"
-                    pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                    title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                    value={this.state.name}
-                    onChange={this.handleChange}
-                    required
-                />
-                <Label htmlFor={this.telInputId}>Number</Label>
-                <Input
-                    type="tel"
-                    id={this.telInputId}
-                    name="number"
-                    pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                    title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-                    value={this.state.number}
-                    onChange={this.handleChange}
-                    required
-                />
-                <Button type='submit'>Add contact</Button>
-            </Form>
-        );
-    }
+
+    return (
+        <Form onSubmit={handleSubmit}>
+            <Label htmlFor={nameInputId}>Name</Label>
+            <Input
+                type="text"
+                id={nameInputId}
+                name="name"
+                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+                title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+                value={name}
+                onChange={handleChange}
+                required
+            />
+            <Label htmlFor={telInputId}>Number</Label>
+            <Input
+                type="tel"
+                id={telInputId}
+                name="number"
+                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+                title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+                value={number}
+                onChange={handleChange}
+                required
+            />
+            <Button type='submit'>Add contact</Button>
+        </Form>
+    );
 }
 
-export default ContactForm;
+ContactForm.propTypes = {
+    saveContact: PropTypes.func.isRequired,
+}

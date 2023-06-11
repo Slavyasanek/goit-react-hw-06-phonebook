@@ -1,16 +1,16 @@
-import { Component } from "react";
 import { SectionWrapper } from "./Section.styled";
+import PropTypes  from 'prop-types';
 
-class Section extends Component {
-    render() {
-        const {sectionType, title, children } = this.props;
+export const Section = ({sectionType, title, children }) => {
         return (
             <SectionWrapper sectionType={sectionType}>
                 {title === 'Phonebook' ? (<h1>{title}</h1>) : (<h2>{title}</h2>)}
                 {children}
             </SectionWrapper>
         );
-    }
 }
 
-export default Section;
+Section.propTypes = {
+    title: PropTypes.string.isRequired,
+    sectionType: PropTypes.string.isRequired
+}
