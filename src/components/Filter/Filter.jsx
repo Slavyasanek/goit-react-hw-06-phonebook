@@ -1,10 +1,17 @@
 import { FilterInput, FilterWrapper } from './Filter.styled';
 import { AiOutlineSearch } from 'react-icons/ai'
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
+import {useDispatch, useSelector} from 'react-redux';
+import { getFilter } from 'redux/selectors';
+import { setFilter } from 'redux/filterSlice';
 
-export const Filter = ({filterChange, filterValue}) => {
-    let filterId = nanoid();
+export const Filter = () => {
+    const filterId = nanoid();
+    const dispatch = useDispatch();
+
+    const handleChange = ({target}) => {
+        dispatch(setFilter(target.value))
+    }
 
     return (
         <FilterWrapper>
@@ -16,14 +23,9 @@ export const Filter = ({filterChange, filterValue}) => {
                 pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
                 title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
                 placeholder='Searching by name...'
-                onChange={filterChange}
-                value={filterValue}
+                onChange={handleChange}
+                value={useSelector(getFilter)}
             />
             <AiOutlineSearch />
         </FilterWrapper>);
-}
-
-Filter.propTypes = {
-    filterChange: PropTypes.func.isRequired,
-    filterValue: PropTypes.string.isRequired
 }
