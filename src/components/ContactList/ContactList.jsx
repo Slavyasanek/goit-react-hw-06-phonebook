@@ -46,7 +46,7 @@ export const ContactList = () => {
                             )
                         })
                     )
-                        : (<Contact>No matches found</Contact>)
+                        : (<Contact>No matches</Contact>)
                     }
         </List>
     );
